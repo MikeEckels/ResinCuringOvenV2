@@ -39,6 +39,9 @@
     <ClInclude Include="LiquidCrystal_I2C.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Adafruit_MCP9808.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="KalmanFilter.cpp">
@@ -54,6 +57,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="LiquidCrystal_I2C.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Adafruit_MCP9808.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

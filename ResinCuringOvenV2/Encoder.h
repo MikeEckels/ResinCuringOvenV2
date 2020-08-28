@@ -1,4 +1,5 @@
 #pragma once
+#include <Arduino.h>
 
 class Encoder {
 private:
@@ -14,9 +15,6 @@ private:
 	unsigned int maxVal;
 	unsigned int stepVal;
 
-	void PinA();
-	void PinB();
-
 public:
 	Encoder(const unsigned char pinA, const unsigned char pinB, const unsigned char encoderBtn);
 
@@ -28,4 +26,6 @@ public:
 	bool GetDirection();
 	unsigned int GetIndex();
 	void Reset();
+	void PinAISR();
+	void PinBISR();
 };

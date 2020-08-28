@@ -1,4 +1,10 @@
+#include "PID.h"
+#include <Wire.h>
 #include "Encoder.h"
+#include "WatchDog.h"
+#include "KalmanFilter.h"
+#include "Adafruit_MCP9808.h"
+#include "LiquidCrystal_I2C.h"
 
 const unsigned char encoderPinA = 2;
 const unsigned char encoderPinB = 3;

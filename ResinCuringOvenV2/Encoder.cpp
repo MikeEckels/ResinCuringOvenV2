@@ -1,14 +1,28 @@
 #include "Encoder.h"
 
+Encoder* encoderPointerA;
+Encoder* encoderPointerB;
+
+static void globalISRa() {
+	encoderPointerA->PinAISR();
+}
+
+static void globalISRb() {
+	encoderPointerB->PinBISR();
+}
+
 Encoder::Encoder(const unsigned char pinA, const unsigned char pinB, const unsigned char encoderBtn) : pinA(pinA), pinB(pinB), encoderBtn(encoderBtn) {}
 
 void Encoder::Begin() {
+	encoderPointerA = this;
+	encoderPointerB = this;
+
 	pinMode(pinA, INPUT_PULLUP);
 	pinMode(pinB, INPUT_PULLUP);
 	pinMode(encoderBtn, INPUT_PULLUP);
 
-	attachInterrupt(digitalPinToInterrupt(pinA), PinA, CHANGE);
-	attachInterrupt(digitalPinToInterrupt(pinB), PinB, CHANGE);
+	attachInterrupt(digitalPinToInterrupt(this->pinA), globalISRa, CHANGE);
+	attachInterrupt(digitalPinToInterrupt(this->pinB), globalISRb, CHANGE);
 }
 
 void Encoder::End() {
@@ -45,7 +59,7 @@ void Encoder::Reset() {
 	this->encoderPos = 0;
 }
 
-void Encoder::PinA() {
+void Encoder::PinAISR() {
 	if (this->rotating) delay(1);
 
 	if (digitalRead(this->pinA) != this->A_set) {
@@ -59,7 +73,7 @@ void Encoder::PinA() {
 	}
 }
 
-void Encoder::PinB() {
+void Encoder::PinBISR() {
 	if (this->rotating) delay(1);
 
 	if (digitalRead(this->pinB) != this->B_set) {
