@@ -23,9 +23,11 @@ void setup() {
 	encoder.SetStepVal(encoderStepVal);
 
 	encoder.Reset();
+
+	Serial.begin(115200);
 }
 
 
 void loop() {
-  
+	Serial.println(encoder.GetDirection());
 }

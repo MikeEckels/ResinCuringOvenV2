@@ -7,7 +7,7 @@ private:
 
 	bool A_set = false;
 	bool B_set = false;
-	static bool rotating;
+	bool rotating;
 	unsigned int lastPos = 1;
 	volatile unsigned int encoderPos = 0;
 
@@ -23,6 +23,7 @@ public:
 	void SetMinVal(unsigned int min);
 	void SetMaxVal(unsigned int max);
 	void SetStepVal(unsigned int step);
+	void SetIndex(unsigned int pos);
 	bool GetDirection();
 	unsigned int GetIndex();
 	void Reset();

@@ -8,7 +8,7 @@ static void globalISRa() {
 }
 
 static void globalISRb() {
-	encoderPointerB->PinBISR();
+	//encoderPointerB->PinBISR();
 }
 
 Encoder::Encoder(const unsigned char pinA, const unsigned char pinB, const unsigned char encoderBtn) : pinA(pinA), pinB(pinB), encoderBtn(encoderBtn) {}
@@ -22,11 +22,12 @@ void Encoder::Begin() {
 	pinMode(encoderBtn, INPUT_PULLUP);
 
 	attachInterrupt(digitalPinToInterrupt(this->pinA), globalISRa, CHANGE);
-	attachInterrupt(digitalPinToInterrupt(this->pinB), globalISRb, CHANGE);
+	//attachInterrupt(digitalPinToInterrupt(this->pinB), globalISRb, CHANGE);
 }
 
 void Encoder::End() {
-
+	detachInterrupt(digitalPinToInterrupt(this->pinA));
+	//detachInterrupt(digitalPinToInterrupt(this->pinB));
 }
 
 bool Encoder::GetDirection() {
@@ -44,7 +45,7 @@ bool Encoder::GetDirection() {
 }
 
 unsigned int Encoder::GetIndex() {
-	static unsigned int index = 0;
+	/*static unsigned int index = 0;
 	this->rotating = true;
 
 	if (this->lastPos != this->encoderPos) {
@@ -52,15 +53,15 @@ unsigned int Encoder::GetIndex() {
 	}
 
 	this->lastPos = this->encoderPos;
-	return index;
+	return index;*/
 }
 
 void Encoder::Reset() {
-	this->encoderPos = 0;
+	SetIndex(0);
 }
 
 void Encoder::PinAISR() {
-	if (this->rotating) delay(1);
+	/*if (this->rotating) delay(1);
 
 	if (digitalRead(this->pinA) != this->A_set) {
 		this->A_set = !this->A_set;
@@ -70,7 +71,10 @@ void Encoder::PinAISR() {
 		}
 
 		this->rotating = false;
-	}
+	}*/
+
+	if (digitalRead(this->pinA)) digitalRead(this->pinB) ? this->encoderPos++ : this->encoderPos--;
+	else digitalRead(this->pinB) ? this->encoderPos-- : this->encoderPos++;
 }
 
 void Encoder::PinBISR() {
@@ -97,4 +101,8 @@ void Encoder::SetMaxVal(unsigned int max) {
 
 void Encoder::SetStepVal(unsigned int step) {
 	this->stepVal = step;
+}
+
+void Encoder::SetIndex(unsigned int pos) {
+	this->encoderPos = pos;
 }
