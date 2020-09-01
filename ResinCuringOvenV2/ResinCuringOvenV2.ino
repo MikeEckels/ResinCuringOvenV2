@@ -8,7 +8,7 @@
 
 const unsigned char encoderPinA = 2;
 const unsigned char encoderPinB = 3;
-const unsigned char encoderBtnPin = 4;
+const unsigned char encoderBtnPin = 7;
 
 unsigned int maxEncoderVal = 120;
 unsigned int minEncoderVal = 15;
@@ -29,5 +29,6 @@ void setup() {
 
 
 void loop() {
-	Serial.println(encoder.GetDirection());
+	Serial.println(encoder.GetIndex());
+	delay(50);
 }

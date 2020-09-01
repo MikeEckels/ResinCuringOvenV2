@@ -1,21 +1,23 @@
 #include "Encoder.h"
 
 Encoder* encoderPointerA;
-Encoder* encoderPointerB;
+//Encoder* encoderPointerB;
 
 static void globalISRa() {
 	encoderPointerA->PinAISR();
 }
 
+/*
 static void globalISRb() {
-	//encoderPointerB->PinBISR();
+	encoderPointerB->PinBISR();
 }
+*/
 
 Encoder::Encoder(const unsigned char pinA, const unsigned char pinB, const unsigned char encoderBtn) : pinA(pinA), pinB(pinB), encoderBtn(encoderBtn) {}
 
 void Encoder::Begin() {
 	encoderPointerA = this;
-	encoderPointerB = this;
+	//encoderPointerB = this;
 
 	pinMode(pinA, INPUT_PULLUP);
 	pinMode(pinB, INPUT_PULLUP);
@@ -54,6 +56,7 @@ unsigned int Encoder::GetIndex() {
 
 	this->lastPos = this->encoderPos;
 	return index;*/
+	return this->encoderPos;
 }
 
 void Encoder::Reset() {
@@ -77,19 +80,19 @@ void Encoder::PinAISR() {
 	else digitalRead(this->pinB) ? this->encoderPos-- : this->encoderPos++;
 }
 
-void Encoder::PinBISR() {
-	if (this->rotating) delay(1);
-
-	if (digitalRead(this->pinB) != this->B_set) {
-		this->B_set = !this->B_set;
-
-		if (this->B_set && !this->A_set && ((int)this->encoderPos - (int)this->stepVal) > 0) {
-			this->encoderPos = (this->encoderPos - this->minVal < this->minVal) ? this->minVal : this->encoderPos - this->stepVal;
-		}
-
-		this->rotating = false;
-	}
-}
+//void encoder::pinbisr() {
+//	if (this->rotating) delay(1);
+//
+//	if (digitalread(this->pinb) != this->b_set) {
+//		this->b_set = !this->b_set;
+//
+//		if (this->b_set && !this->a_set && ((int)this->encoderpos - (int)this->stepval) > 0) {
+//			this->encoderpos = (this->encoderpos - this->minval < this->minval) ? this->minval : this->encoderpos - this->stepval;
+//		}
+//
+//		this->rotating = false;
+//	}
+//}
 
 void Encoder::SetMinVal(unsigned int min) {
 	this->minVal = min;
