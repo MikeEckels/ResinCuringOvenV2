@@ -30,6 +30,6 @@ void setup() {
 
 void loop() {
 	encoder.Update();
-	Serial.println(encoder.GetIndex());
+	//Serial.println(encoder.GetIndex());
 	delay(100);
 }

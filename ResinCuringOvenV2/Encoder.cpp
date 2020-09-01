@@ -33,7 +33,7 @@ void Encoder::Update() {
     if (this->encoderPos != this->encoderLastPos) {
         this->encoderDir = ((this->encoderLastPos == 0) && (this->encoderPos == 1)) || ((this->encoderLastPos == 1) && (this->encoderPos == 3)) ||
             ((this->encoderLastPos == 3) && (this->encoderPos == 2)) || ((this->encoderLastPos == 2) && (this->encoderPos == 0));
-
+		Serial.println(this->encoderDir);
 		if (this->encoderDir) this->encoderPos++;
 		else this->encoderPos--;
     }
