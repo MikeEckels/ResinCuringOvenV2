@@ -1,111 +1,105 @@
 #include "Encoder.h"
 
-Encoder* encoderPointerA;
-//Encoder* encoderPointerB;
+//Encoder* encoderPinPointer;
 
-static void globalISRa() {
-	encoderPointerA->PinAISR();
-}
-
-/*
-static void globalISRb() {
-	encoderPointerB->PinBISR();
-}
-*/
+//static void globalPinISR() {
+//	encoderPinPointer->PinISR();
+//}
 
 Encoder::Encoder(const unsigned char pinA, const unsigned char pinB, const unsigned char encoderBtn) : pinA(pinA), pinB(pinB), encoderBtn(encoderBtn) {}
 
 void Encoder::Begin() {
-	encoderPointerA = this;
-	//encoderPointerB = this;
+	//encoderPinPointer = this;
 
 	pinMode(pinA, INPUT_PULLUP);
 	pinMode(pinB, INPUT_PULLUP);
 	pinMode(encoderBtn, INPUT_PULLUP);
 
-	attachInterrupt(digitalPinToInterrupt(this->pinA), globalISRa, CHANGE);
-	//attachInterrupt(digitalPinToInterrupt(this->pinB), globalISRb, CHANGE);
+	//attachInterrupt(digitalPinToInterrupt(this->pinA), globalPinISR, CHANGE);
+	Reset();
 }
 
 void Encoder::End() {
-	detachInterrupt(digitalPinToInterrupt(this->pinA));
-	//detachInterrupt(digitalPinToInterrupt(this->pinB));
-}
-
-bool Encoder::GetDirection() {
-	bool direction;
-
-	if (this->encoderPos > this->lastPos) {
-		direction = 1;
-	}
-	else if (this->encoderPos < this->lastPos) {
-		direction = 0;
-	}
-
-	this->lastPos = this->encoderPos;
-	return direction;
-}
-
-unsigned int Encoder::GetIndex() {
-	/*static unsigned int index = 0;
-	this->rotating = true;
-
-	if (this->lastPos != this->encoderPos) {
-		index = this->encoderPos;
-	}
-
-	this->lastPos = this->encoderPos;
-	return index;*/
-	return this->encoderPos;
+	//detachInterrupt(digitalPinToInterrupt(this->pinA));
 }
 
 void Encoder::Reset() {
 	SetIndex(0);
 }
 
-void Encoder::PinAISR() {
-	/*if (this->rotating) delay(1);
+void Encoder::Update() {
+    this->encoderPos = (digitalRead(this->pinB) * 2) + digitalRead(this->pinA);;
 
-	if (digitalRead(this->pinA) != this->A_set) {
-		this->A_set = !this->A_set;
+    if (this->encoderPos != this->encoderLastPos) {
+        this->encoderDir = ((this->encoderLastPos == 0) && (this->encoderPos == 1)) || ((this->encoderLastPos == 1) && (this->encoderPos == 3)) ||
+            ((this->encoderLastPos == 3) && (this->encoderPos == 2)) || ((this->encoderLastPos == 2) && (this->encoderPos == 0));
 
-		if (this->A_set && !this->B_set) {
-			this->encoderPos = (this->encoderPos + this->minVal > this->maxVal) ? this->maxVal : this->encoderPos + this->stepVal;
-		}
-
-		this->rotating = false;
-	}*/
-
-	if (digitalRead(this->pinA)) digitalRead(this->pinB) ? this->encoderPos++ : this->encoderPos--;
-	else digitalRead(this->pinB) ? this->encoderPos-- : this->encoderPos++;
+		if (this->encoderDir) this->encoderPos++;
+		else this->encoderPos--;
+    }
+    this->encoderPos = this->encoderLastPos;
+	CheckBounds();
 }
 
-//void encoder::pinbisr() {
-//	if (this->rotating) delay(1);
+//void Encoder::PinISR() {
+//	noInterrupts();
 //
-//	if (digitalread(this->pinb) != this->b_set) {
-//		this->b_set = !this->b_set;
+//	if (digitalRead(this->pinA)) digitalRead(this->pinB) ? this->encoderPos++ : this->encoderPos--;
+//	else digitalRead(this->pinB) ? this->encoderPos-- : this->encoderPos++;
 //
-//		if (this->b_set && !this->a_set && ((int)this->encoderpos - (int)this->stepval) > 0) {
-//			this->encoderpos = (this->encoderpos - this->minval < this->minval) ? this->minval : this->encoderpos - this->stepval;
+//	/*if (digitalRead(this->pinA)) {
+//		if (digitalRead(this->pinB)) {
+//			this->encoderPos = (this->encoderPos + this->minVal > this->maxVal) ? this->maxVal : this->encoderPos + this->stepVal;
 //		}
-//
-//		this->rotating = false;
+//		else {
+//				this->encoderPos = (this->encoderPos - this->minVal < this->minVal) ? this->minVal : this->encoderPos - this->stepVal;
+//		}
+//		this->encoderDir = false;
 //	}
+//	else {
+//		if (digitalRead(this->pinB)) {
+//				this->encoderPos = (this->encoderPos - this->minVal < this->minVal) ? this->minVal : this->encoderPos - this->stepVal;
+//		}
+//		else {
+//			this->encoderPos = (this->encoderPos + this->minVal > this->maxVal) ? this->maxVal : this->encoderPos + this->stepVal;
+//		}
+//		this->encoderDir = true;
+//	}*/
+//
+//	interrupts();
 //}
 
-void Encoder::SetMinVal(unsigned int min) {
-	this->minVal = min;
+bool Encoder::GetBtnState() {
+	return digitalRead(this->encoderBtn);
 }
 
-void Encoder::SetMaxVal(unsigned int max) {
+bool Encoder::GetDirection() {
+	return this->encoderDir;
+}
+
+long int Encoder::GetIndex() {
+	return this->encoderPos;
+}
+
+void Encoder::SetMinVal(long int min) {
+	this->minVal = min;
+	CheckBounds();
+}
+
+void Encoder::SetMaxVal(long int max) {
 	this->maxVal = max;
+	CheckBounds();
 }
 
 void Encoder::SetStepVal(unsigned int step) {
 	this->stepVal = step;
 }
 
-void Encoder::SetIndex(unsigned int pos) {
+void Encoder::SetIndex(long int pos) {
 	this->encoderPos = pos;
+}
+
+void Encoder::CheckBounds() {
+	if (this->encoderPos < this->minVal) this->encoderPos = this->minVal;
+	if (this->encoderPos > this->maxVal) this->encoderPos = this->maxVal;
 }

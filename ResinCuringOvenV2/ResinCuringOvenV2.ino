@@ -8,11 +8,11 @@
 
 const unsigned char encoderPinA = 2;
 const unsigned char encoderPinB = 3;
-const unsigned char encoderBtnPin = 7;
+const unsigned char encoderBtnPin = 4;
 
-unsigned int maxEncoderVal = 120;
-unsigned int minEncoderVal = 15;
-unsigned int encoderStepVal = 15;
+long int maxEncoderVal = 120;
+long int minEncoderVal = 15;
+long int encoderStepVal = 15;
 
 Encoder encoder(encoderPinA, encoderPinB, encoderBtnPin);
 
@@ -29,6 +29,7 @@ void setup() {
 
 
 void loop() {
+	encoder.Update();
 	Serial.println(encoder.GetIndex());
-	delay(50);
+	delay(100);
 }
