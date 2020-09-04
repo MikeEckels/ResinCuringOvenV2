@@ -4,9 +4,9 @@ class Menu {
 private:
 
 public:
-	//void SetTemp(unsigned int);
-	//void SetTime(unsigned int);
+	void SetDesiredTemp(unsigned int);
+	void SetDesiredTime(unsigned int);
 
-	//unsigned int GetDesiredTemp();
-	//unsigned int GetDesiredTime();
+	unsigned int GetDesiredTemp();
+	unsigned int GetDesiredTime();
 };
