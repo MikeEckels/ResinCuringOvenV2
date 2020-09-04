@@ -4,6 +4,10 @@ class Menu {
 private:
 
 public:
+	unsigned int desiredTemp;
+	unsigned int desiredTime;
+
+	Menu();
 	void SetDesiredTemp(unsigned int);
 	void SetDesiredTime(unsigned int);
 

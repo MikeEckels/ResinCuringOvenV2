@@ -1,19 +1,19 @@
 #include "PID.h"
 #include <Wire.h>
+#include "Menu.h"
+#include "Oven.h"
 #include "Encoder.h"
+#include "PinDefs.h"
 #include "WatchDog.h"
 #include "KalmanFilter.h"
 #include "Adafruit_MCP9808.h"
 #include "LiquidCrystal_I2C.h"
 
-const unsigned char encoderPinA = 2;
-const unsigned char encoderPinB = 3;
-const unsigned char encoderBtnPin = 4;
-
 long int maxEncoderVal = 120;
 long int minEncoderVal = 15;
 long int encoderStepVal = 15;
 
+Menu menu;
 Encoder encoder(encoderPinA, encoderPinB, encoderBtnPin);
 
 void setup() {
