@@ -21,15 +21,11 @@ void setup() {
 	encoder.SetMinVal(minEncoderVal);
 	encoder.SetMaxVal(maxEncoderVal);
 	encoder.SetStepVal(encoderStepVal);
-
 	encoder.Reset();
 
 	Serial.begin(115200);
 }
 
-
 void loop() {
-	encoder.Update();
-	//Serial.println(encoder.GetIndex());
-	delay(100);
+
 }

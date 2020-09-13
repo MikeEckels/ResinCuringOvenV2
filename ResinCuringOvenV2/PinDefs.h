@@ -1,4 +1,6 @@
 #pragma once
+#include "Arduino.h"
+
 //Encoder
 const unsigned char encoderPinA = 2;
 const unsigned char encoderPinB = 3;
